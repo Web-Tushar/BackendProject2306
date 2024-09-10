@@ -17,7 +17,7 @@ const UserSchema = new Schema({
           trim: true,
           unique: true,
           required: [true, 'Telephone number is missing !!'],
-          max: [11," max number size is 11"]
+          max: [11, " max number size is 11"]
 
      },
      Address_1: {
@@ -43,8 +43,8 @@ const UserSchema = new Schema({
           trim: true,
           unique: true,
           required: [true, 'Post_Code is missing !!'],
-          max: [ 4 , "invalid post code max size is 4 !!"],
-          min: [ 4 , "invalid post code min size is 4 !!"]
+          max: [4, "invalid post code max size is 4 !!"],
+          min: [4, "invalid post code min size is 4 !!"]
 
      },
      Division: {
@@ -83,13 +83,24 @@ const UserSchema = new Schema({
 
      },
 
-     OTP:{
+     OTP: {
           type: number,
+     },
+
+     Role:{
+          type: String,
+          enum:['admin', "users", "marchent"],
+          default: "users",
+     },
+     refreshToken: {
+          type: String
+     },
+
+     avater:{
+          type:String, 
      }
-
-
 },
 { timestamps: true }
 );
-const usermodel = mongoose.model('Tank', UserSchema );
-module.exports = {usermodel}
+const usermodel = mongoose.model('Tank', UserSchema);
+module.exports = { usermodel }

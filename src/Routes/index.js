@@ -8,7 +8,7 @@ const _ = Router();
 
 _.use(process.env.BASE_URL, authRoutes)
 _.use(process.env.BASE_URL,(req,res)=>{
-     res.status(400).json(new ApiError(false,null,400,"api invalid routes"))
+     res.status(400).json(new ApiError(false,null,404,"api invalid routes"))
 })
    module.exports = _;
    
