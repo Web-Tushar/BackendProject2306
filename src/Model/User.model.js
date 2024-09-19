@@ -12,6 +12,11 @@ const UserSchema = new Schema({
           type: String,
           trim: true,
      },
+     Email_address:{
+          type:String,
+          unique: true,
+          required: [true, "email is Missing"]
+     },
      Telephone: {
           type: number,
           trim: true,
