@@ -5,4 +5,5 @@
  */
 
 const DBName = "BackendProject2306"
- module.exports = {DBName}
+     
+ module.exports = DBName

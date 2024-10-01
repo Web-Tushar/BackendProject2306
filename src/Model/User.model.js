@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt'); 
 const { Schema } = mongoose
 const UserSchema = new Schema({
      FirstName: {
@@ -11,6 +12,8 @@ const UserSchema = new Schema({
      LastName: {
           type: String,
           trim: true,
+          max: [25, "Max Name Size 25 charecter"],
+          min: [25, "Min Value 3 charecter"]
      },
      Email_address:{
           type:String,
@@ -18,78 +21,54 @@ const UserSchema = new Schema({
           required: [true, "email is Missing"]
      },
      Telephone: {
-          type: number,
-          trim: true,
-          unique: true,
+          type: String,
           required: [true, 'Telephone number is missing !!'],
-          max: [11, " max number size is 11"]
-
      },
      Address_1: {
           type: String,
-          trim: true,
-          unique: true,
           required: [true, 'Address_1  is missing !!'],
-
      },
      Address_2: {
           type: String,
-          trim: true,
      },
      City: {
           type: String,
-          trim: true,
-          unique: true,
           required: [true, 'City is missing !!'],
-
      },
      Post_Code: {
-          type: String,
-          trim: true,
-          unique: true,
-          required: [true, 'Post_Code is missing !!'],
+          type: Number,
           max: [4, "invalid post code max size is 4 !!"],
           min: [4, "invalid post code min size is 4 !!"]
-
      },
      Division: {
           type: String,
-          trim: true,
-          required: [true, 'Division is missing !!'],
-
      },
-     District: {
-          type: String,
-          trim: true,
-          required: [true, 'District is missing !!'],
-
-     },
+     // District: {
+     //      type: String,
+     //      trim: true,
+     //      required: [true, 'District is missing !!'],
+     // },
      Password: {
           type: String,
           trim: true,
-          required: [true, 'Password is missing !!'],
-
+          required :true,
      },
-     Policy: {
-          type: Boolean,
-          trim: true,
-          required: [true, 'Policy is missing !!'],
-
-     },
+     // Policy: {
+     //      type: Boolean,
+     //      trim: true,
+     //      required: [true, 'Policy is missing !!'],
+     // },
      AccessToken: {
           type: String,
-          trim: true,
-
+          
      },
      Role: {
           type: String,
           trim: true,
-
-
      },
 
-     OTP: {
-          type: number,
+     OTP: { 
+          type: Number,
      },
 
      Role:{
@@ -100,12 +79,26 @@ const UserSchema = new Schema({
      refreshToken: {
           type: String
      },
-
      avater:{
           type:String, 
      }
 },
 { timestamps: true }
 );
-const usermodel = mongoose.model('Tank', UserSchema);
+UserSchema.pre("save",async function (next) {
+     if(this.isModified(this.Password)){
+          this.Password = await bcrypt.hash(this.Password,10) 
+          next()
+
+     }
+    next()
+    console.log(hashpassword);
+})
+UserSchema.methods.isVaidatePassowrd = async(plainpassword)=>{
+      const passwpordResult = await bcrypt.compare(plainpassword,this.Password)
+      return passwpordResult
+}
+
+
+const usermodel = mongoose.model('Users', UserSchema);
 module.exports = { usermodel }
